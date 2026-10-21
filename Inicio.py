@@ -86,7 +86,7 @@ st.markdown("""
         margin: 0;
     }
 
-    /* ═══ CANVAS BOX (Estilo aplicado directamente al canvas) ═══ */
+    /* ═══ CANVAS BOX ═══ */
     [data-testid="stCanvas"] {
         background: #000000;
         border: 2px solid var(--border);
@@ -248,7 +248,6 @@ col1, col2 = st.columns([1.5, 1], gap="large")
 
 with col1:
     st.markdown("#### 🎨 Lienzo")
-    # Al quitar el with st.container(key="canvas_box"), el canvas recibe el CSS directamente
     canvas_result = st_canvas(
         fill_color="black",
         stroke_width=20,
@@ -312,13 +311,15 @@ if predict_btn:
             
             st.markdown("---")
             
-            # 3. Imágenes del procesamiento
+            # 3. Imágenes del procesamiento (AQUÍ ESTÁ LA CORRECCIÓN)
             st.markdown("#### 🖼️ Procesamiento de Imagen")
             col_img1, col_img2 = st.columns(2)
             
             with col_img1:
                 st.markdown("**Original (Dibujo)**")
-                st.image(canvas_result.image_data, use_container_width=True)
+                # Convertimos el ndarray del canvas a una imagen PIL en modo RGBA
+                canvas_pil = Image.fromarray(canvas_result.image_data.astype("uint8"), 'RGBA')
+                st.image(canvas_pil, use_container_width=True)
             
             with col_img2:
                 st.markdown("**Procesada (28x28 px)**")
