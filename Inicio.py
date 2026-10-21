@@ -311,19 +311,20 @@ if predict_btn:
             
             st.markdown("---")
             
-            # 3. Imágenes del procesamiento (AQUÍ ESTÁ LA CORRECCIÓN)
+            # 3. Imágenes del procesamiento
             st.markdown("#### 🖼️ Procesamiento de Imagen")
             col_img1, col_img2 = st.columns(2)
             
             with col_img1:
                 st.markdown("**Original (Dibujo)**")
-                # Convertimos el ndarray del canvas a una imagen PIL en modo RGBA
                 canvas_pil = Image.fromarray(canvas_result.image_data.astype("uint8"), 'RGBA')
-                st.image(canvas_pil, use_container_width=True)
+                # Corregido: use_column_width en lugar de use_container_width para st.image
+                st.image(canvas_pil, use_column_width=True)
             
             with col_img2:
                 st.markdown("**Procesada (28x28 px)**")
-                st.image(image_resized, use_container_width=True)
+                # Corregido: use_column_width en lugar de use_container_width para st.image
+                st.image(image_resized, use_column_width=True)
             
             # 4. Gráfico de barras
             st.markdown("#### 📊 Probabilidades por dígito")
