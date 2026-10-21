@@ -86,8 +86,8 @@ st.markdown("""
         margin: 0;
     }
 
-    /* ═══ CANVAS BOX ═══ */
-    .st-key-canvas_box {
+    /* ═══ CANVAS BOX (Estilo aplicado directamente al canvas) ═══ */
+    [data-testid="stCanvas"] {
         background: #000000;
         border: 2px solid var(--border);
         border-radius: 20px;
@@ -98,14 +98,12 @@ st.markdown("""
         align-items: center;
         transition: border-color 0.3s ease;
     }
-    .st-key-canvas_box:hover {
+    [data-testid="stCanvas"]:hover {
         border-color: var(--accent);
     }
-    .st-key-canvas_box [data-testid="stCanvas"] {
-        margin: 0 auto;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    [data-testid="stCanvas"] canvas {
+        border-radius: 12px !important;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.1) !important;
     }
 
     /* ═══ BOTONES ═══ */
@@ -188,19 +186,6 @@ st.markdown("""
         font-size: 2rem !important;
     }
 
-    /* ═══ IMÁGENES ═══ */
-    .img-card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 1rem;
-        text-align: center;
-    }
-    .img-card img {
-        border-radius: 8px;
-        margin-top: 0.5rem;
-    }
-
     /* ═══ EXPANDER Y ALERTAS ═══ */
     [data-testid="stExpander"] {
         background: var(--surface) !important;
@@ -263,17 +248,17 @@ col1, col2 = st.columns([1.5, 1], gap="large")
 
 with col1:
     st.markdown("#### 🎨 Lienzo")
-    with st.container(key="canvas_box"):
-        canvas_result = st_canvas(
-            fill_color="black",
-            stroke_width=20,
-            stroke_color="white",
-            background_color="black",
-            width=400,
-            height=400,
-            drawing_mode="freedraw",
-            key="canvas",
-        )
+    # Al quitar el with st.container(key="canvas_box"), el canvas recibe el CSS directamente
+    canvas_result = st_canvas(
+        fill_color="black",
+        stroke_width=20,
+        stroke_color="white",
+        background_color="black",
+        width=400,
+        height=400,
+        drawing_mode="freedraw",
+        key="canvas",
+    )
 
 with col2:
     st.markdown("#### 🎮 Controles")
@@ -332,14 +317,12 @@ if predict_btn:
             col_img1, col_img2 = st.columns(2)
             
             with col_img1:
-                with st.container(border=True):
-                    st.markdown("**Original (Dibujo)**")
-                    st.image(canvas_result.image_data, use_container_width=True)
+                st.markdown("**Original (Dibujo)**")
+                st.image(canvas_result.image_data, use_container_width=True)
             
             with col_img2:
-                with st.container(border=True):
-                    st.markdown("**Procesada (28x28 px)**")
-                    st.image(image_resized, use_container_width=True)
+                st.markdown("**Procesada (28x28 px)**")
+                st.image(image_resized, use_container_width=True)
             
             # 4. Gráfico de barras
             st.markdown("#### 📊 Probabilidades por dígito")
